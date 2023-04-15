@@ -20,13 +20,17 @@ export default NextAuth({
           password: string;
         };
 
-        let user = await login({ email: emailOrPhoneNumber, password });
+        console.log(credentials);
 
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
+        // let user = await login({ email: emailOrPhoneNumber, password });
+
+        // if (user) {
+        //   return user;
+        // } else {
+        //   return null;
+        // }
+
+        return null;
       },
     }),
   ],

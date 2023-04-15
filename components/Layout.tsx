@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
-import Header from "./Header";
+import { Header } from "./Header";
 
 const SideBar = dynamic(() => import("./SideBar"), { ssr: false });
 
@@ -9,7 +9,7 @@ interface IAdminLayout {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: IAdminLayout) {
+export const Layout = ({ children }: IAdminLayout) => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -27,4 +27,4 @@ export default function Layout({ children }: IAdminLayout) {
       </div>
     </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { menus } from "../utils/menus";
 
-const SideBar = ({ open }: { open: boolean }) => {
+export const SideBar = ({ open }: { open: boolean }) => {
   return (
     <div
       className={`fixed top-0 left-0 h-screen  bg-gray-900 ${
@@ -163,5 +163,3 @@ const SideBar = ({ open }: { open: boolean }) => {
     </div>
   );
 };
-
-export default SideBar;

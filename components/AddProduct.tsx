@@ -1,12 +1,12 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import Card from "../components/Card";
+import { Card } from "../components/Card";
 import InputField from "./InputField";
 import { useForm } from "react-hook-form";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import Image from "next/image";
 import { Button } from "./Button";
 
-const AddProductForm = () => {
+export const AddProductForm = () => {
   const {
     register,
     formState: { errors },
@@ -148,5 +148,3 @@ const AddProductForm = () => {
     </div>
   );
 };
-
-export default AddProductForm;

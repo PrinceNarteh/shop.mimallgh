@@ -22,7 +22,7 @@ interface ISelectField {
   >;
 }
 
-const SelectField = ({
+export const SelectField = ({
   name,
   label,
   options,
@@ -57,5 +57,3 @@ const SelectField = ({
     </div>
   );
 };
-
-export default SelectField;

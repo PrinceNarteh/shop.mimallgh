@@ -2,7 +2,7 @@ import React from "react";
 import { GoThreeBars } from "react-icons/go";
 import { BiSearch } from "react-icons/bi";
 
-const Header = ({ open, setOpen }) => {
+export const Header = ({ open, setOpen }) => {
   return (
     <div
       className={`sticky top-0 flex justify-between bg-dark-gray z-50 px-5 py-2 duration-300`}
@@ -29,5 +29,3 @@ const Header = ({ open, setOpen }) => {
     </div>
   );
 };
-
-export default Header;

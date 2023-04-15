@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { MdOutlineStarPurple500, MdOutlineStarHalf } from "react-icons/md";
 
-const ProductCard = ({ id }: { id: string }) => {
+export const ProductCard = ({ id }: { id: string }) => {
   return (
     <div className="h-[300px] w-52 cursor-pointer overflow-hidden rounded-lg pb-5 shadow-lg">
       <Link href={"/1"}>
@@ -38,5 +36,3 @@ const ProductCard = ({ id }: { id: string }) => {
     </div>
   );
 };
-
-export default ProductCard;

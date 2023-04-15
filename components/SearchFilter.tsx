@@ -18,7 +18,7 @@ interface ISearchFilter {
   value: string;
 }
 
-const SearchFilter = ({
+export const SearchFilter = ({
   options,
   setValue,
   errors,
@@ -119,5 +119,3 @@ const SearchFilter = ({
     </div>
   );
 };
-
-export default SearchFilter;

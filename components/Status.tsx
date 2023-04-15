@@ -1,6 +1,6 @@
 import React from "react";
 
-const Status = ({ variant = "success", children }) => {
+export const Status = ({ variant = "success", children }) => {
   let color = "";
 
   switch (variant) {
@@ -28,5 +28,3 @@ const Status = ({ variant = "success", children }) => {
     </span>
   );
 };
-
-export default Status;

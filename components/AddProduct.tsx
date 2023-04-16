@@ -1,10 +1,8 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
-import { Card } from "../components/Card";
-import InputField from "./InputField";
+import { Button, Card, InputField } from "@/components";
+import Image from "next/image";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import Image from "next/image";
-import { Button } from "./Button";
 
 export const AddProductForm = () => {
   const {

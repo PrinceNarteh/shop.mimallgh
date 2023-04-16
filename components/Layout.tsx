@@ -1,9 +1,7 @@
-import dynamic from "next/dynamic";
 import { useState } from "react";
+import { SideBar } from "./SideBar";
 
 import { Header } from "./Header";
-
-const SideBar = dynamic(() => import("./SideBar"), { ssr: false });
 
 interface IAdminLayout {
   children: React.ReactNode;

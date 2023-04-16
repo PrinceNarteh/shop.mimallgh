@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import apple from "../../../assets/images/red-apple.png";
-import user from "../../../assets/images/user-1.jpg";
+import apple from "@/assets/images/red-apple.png";
+import user from "@/assets/images/user-1.jpg";
 
 export const OrderDetails = () => {
   return (

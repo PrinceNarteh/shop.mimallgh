@@ -7,15 +7,17 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-import { Button } from "@/components/Button";
-import Card from "./Card";
-import InputField from "./InputField";
-import Modal from "./Modal";
-import SearchFilter from "./SearchFilter";
-import { SelectOption } from "./SelectOption";
-import { deleteProductImage } from "../utils/deleteProductImage";
-import Loader from "./Loader";
-import { IAdminCreateProductDto } from "../utils/validations";
+import {
+  Button,
+  Card,
+  InputField,
+  SearchFilter,
+  Modal,
+  SelectOption,
+  Loader,
+} from "@/components";
+import { deleteProductImage } from "@/utils/deleteProductImage";
+import { IAdminCreateProductDto } from "@/utils/validations";
 
 const convertBase64 = (file: File): Promise<string> => {
   return new Promise((resolve) => {
@@ -76,18 +78,6 @@ const AdminAddProductForm = () => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [publicId, setPublicId] = useState("");
-  const getAllShops = api.shops.getAllShops.useQuery();
-  const createProductMutation = api.products.createProduct.useMutation();
-  const updateProductMutation = api.products.updateProduct.useMutation();
-  const { data, refetch, isLoading, isError } =
-    api.products.getProductById.useQuery(
-      {
-        id: productId as string,
-      },
-      {
-        enabled: false,
-      }
-    );
 
   const selectedImages = (e: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = e.target.files;
@@ -140,7 +130,7 @@ const AdminAddProductForm = () => {
         await deleteProductImage(publicId);
 
         const newImages = getValues().images.filter(
-          (image) => image.public_id !== publicId
+          (image: { public_id: string }) => image.public_id !== publicId
         );
 
         setValue("images", newImages);
@@ -222,7 +212,6 @@ const AdminAddProductForm = () => {
 
   useEffect(() => {
     if (productId && !getValues().id) {
-      refetch();
       reset(data as any);
       setFetchAgain(false);
     }

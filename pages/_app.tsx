@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 
 import { Poppins } from "next/font/google";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components";
 import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "500" });

@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { BiSearch } from "react-icons/bi";
 import { products } from "@/data/data";
-import Card from "../../components/Card";
-import Status from "../../components/Status";
+import { Card, Status } from "@/components";
 
 const page = () => {
   return (

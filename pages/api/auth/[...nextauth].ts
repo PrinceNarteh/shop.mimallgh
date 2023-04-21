@@ -7,7 +7,7 @@ export default NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        emailOrPhoneNumber: {
+        shopCode: {
           label: "Username",
           type: "text",
           placeholder: "jsmith",
@@ -15,14 +15,14 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const { emailOrPhoneNumber, password } = credentials as {
-          emailOrPhoneNumber: string;
+        const { shopCode, password } = credentials as {
+          shopCode: string;
           password: string;
         };
 
         console.log(credentials);
 
-        // let user = await login({ email: emailOrPhoneNumber, password });
+        // let user = await login({ email: shopCode, password });
 
         // if (user) {
         //   return user;

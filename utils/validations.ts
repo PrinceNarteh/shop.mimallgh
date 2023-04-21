@@ -5,7 +5,6 @@ export const IdDto = z.object({
 });
 
 export const createProductDto = z.object({
-  id: z.string().cuid2(),
   shopId: z.string().cuid2(),
   title: z.string(),
   description: z

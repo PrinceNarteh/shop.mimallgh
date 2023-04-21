@@ -10,7 +10,7 @@ const Login = () => {
   const onSubmit = handleSubmit((data) => {
     signIn("credentials", {
       ...data,
-      redirect: true,
+      redirect: false,
       callbackUrl: "/",
     });
   });
@@ -30,7 +30,7 @@ const Login = () => {
           </div>
         </div>
         <div className="my-7 text-center">
-          <h1 className="text-4xl font-bold text-green-800">Log In</h1>
+          <h1 className="text-4xl font-bold text-green-800 mb-2">Log In</h1>
           <p className="text-gray-400 text-sm">
             Enter your credentials to login
           </p>
@@ -39,14 +39,14 @@ const Login = () => {
         <form onSubmit={onSubmit} className="space-y-3">
           <input
             type="text"
-            placeholder="Email or Phone Number"
-            className="border border-gray-400 w-full p-3 rounded text-lg focus:border-2 outline-green-800"
-            {...register("emailOrPhoneNumber")}
+            placeholder="Shop Code"
+            className="border border-gray-400 w-full p-3 rounded text-lg focus:border-2 outline-green-800 placeholder:italic"
+            {...register("shopCode")}
           />
           <input
             type="password"
             placeholder="Password"
-            className="border border-gray-400 w-full p-3 rounded text-lg focus:border-2 outline-green-800"
+            className="border border-gray-400 w-full p-3 rounded text-lg focus:border-2 outline-green-800 placeholder:italic"
             {...register("password")}
           />
           <input

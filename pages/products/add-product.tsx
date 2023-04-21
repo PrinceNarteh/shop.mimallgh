@@ -1,9 +1,9 @@
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import type { ChangeEvent } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -11,17 +11,13 @@ import {
   Button,
   Card,
   InputField,
+  Loader,
   Modal,
   SelectOption,
-  Loader,
 } from "@/components";
+import { createProduct, updateProduct } from "@/services/products";
 import { deleteProductImage } from "@/utils/deleteProductImage";
-import {
-  createProductDto,
-  ICreateProduct,
-  IUpdateProduct,
-} from "@/utils/validations";
-import { updateProduct, createProduct } from "@/services/products";
+import { ICreateProduct } from "@/utils/validations";
 
 const convertBase64 = (file: File): Promise<string> => {
   return new Promise((resolve) => {
@@ -143,7 +139,7 @@ const AdminAddProductForm = () => {
     }
   }
 
-  const submitHandler: SubmitHandler<IUpdateProduct> = async (data) => {
+  const submitHandler = handleSubmit(async (data) => {
     const toastId = toast.loading("Loading");
     const imageUrls = [];
 
@@ -207,7 +203,7 @@ const AdminAddProductForm = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   useEffect(() => {
     if (productId && !getValues().id) {
@@ -223,7 +219,7 @@ const AdminAddProductForm = () => {
   return (
     <div className="mx-auto max-w-4xl pb-5">
       <Card heading={"Add Product"}>
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={submitHandler}>
           <div className="space-y-4">
             <InputField
               label="Title"

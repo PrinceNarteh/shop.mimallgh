@@ -5,6 +5,7 @@ export const IdDto = z.object({
 });
 
 export const createProductDto = z.object({
+  id: z.union([z.string().cuid2(), z.null()]),
   shopId: z.string().cuid2(),
   title: z.string(),
   description: z

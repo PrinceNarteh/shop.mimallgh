@@ -11,13 +11,17 @@ import {
   Button,
   Card,
   InputField,
-  SearchFilter,
   Modal,
   SelectOption,
   Loader,
 } from "@/components";
 import { deleteProductImage } from "@/utils/deleteProductImage";
-import { IAdminCreateProductDto } from "@/utils/validations";
+import {
+  createProductDto,
+  ICreateProduct,
+  IUpdateProduct,
+} from "@/utils/validations";
+import { updateProduct, createProduct } from "@/services/products";
 
 const convertBase64 = (file: File): Promise<string> => {
   return new Promise((resolve) => {
@@ -44,7 +48,7 @@ const categories = [
   { label: "Tech", value: "tech" },
 ];
 
-const initialValues: IAdminCreateProductDto = {
+const initialValues: ICreateProduct = {
   id: "",
   brand: "",
   category: "food",
@@ -60,7 +64,6 @@ const initialValues: IAdminCreateProductDto = {
 const AdminAddProductForm = () => {
   const {
     query: { productId },
-    push,
   } = useRouter();
 
   const {
@@ -70,7 +73,7 @@ const AdminAddProductForm = () => {
     getValues,
     reset,
     handleSubmit,
-  } = useForm<IAdminCreateProductDto>({
+  } = useForm({
     defaultValues: initialValues,
   });
   const setFetchAgain = useState(true)[1];
@@ -78,6 +81,7 @@ const AdminAddProductForm = () => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [publicId, setPublicId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedImages = (e: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = e.target.files;
@@ -110,13 +114,6 @@ const AdminAddProductForm = () => {
     getImages();
   }, [images]);
 
-  const shops = getAllShops?.data?.map((shop) => ({
-    id: shop.id,
-    label: `${shop?.name || ""} - ${shop?.owner?.firstName || ""} ${
-      shop?.owner?.middleName || ""
-    } ${shop?.owner?.lastName}`,
-  }));
-
   const deleteImage = (public_id: string) => {
     setPublicId(public_id);
     setOpenDialog(true);
@@ -146,7 +143,7 @@ const AdminAddProductForm = () => {
     }
   }
 
-  const submitHandler: SubmitHandler<IAdminCreateProductDto> = (data) => {
+  const submitHandler: SubmitHandler<IUpdateProduct> = async (data) => {
     const toastId = toast.loading("Loading");
     const imageUrls = [];
 
@@ -177,29 +174,31 @@ const AdminAddProductForm = () => {
           };
 
           if (data.id) {
-            updateProductMutation.mutate(newData, {
-              onSuccess: (value) => {
-                toast.dismiss(toastId);
-                toast.success("Product updated successfully");
-                push(`/products/${value?.id || ""}`).catch((error) =>
-                  console.log(error)
-                );
-              },
-              onError: () => {
-                toast.dismiss(toastId);
-              },
-            });
+            const res = updateProduct(data.id, data);
+            // updateProductMutation.mutate(newData, {
+            //   onSuccess: (value) => {
+            //     toast.dismiss(toastId);
+            //     toast.success("Product updated successfully");
+            //     push(`/products/${value?.id || ""}`).catch((error) =>
+            //       console.log(error)
+            //     );
+            //   },
+            //   onError: () => {
+            //     toast.dismiss(toastId);
+            //   },
+            // });
           } else {
-            createProductMutation.mutate(newData, {
-              onSuccess: () => {
-                toast.dismiss(toastId);
-                toast.success("Product created successfully");
-                reset();
-              },
-              onError: () => {
-                toast.dismiss(toastId);
-              },
-            });
+            const res = createProduct(data);
+            // createProductMutation.mutate(newData, {
+            //   onSuccess: () => {
+            //     toast.dismiss(toastId);
+            //     toast.success("Product created successfully");
+            //     reset();
+            //   },
+            //   onError: () => {
+            //     toast.dismiss(toastId);
+            //   },
+            // });
           }
         })
         .catch((error) => {
@@ -221,27 +220,11 @@ const AdminAddProductForm = () => {
     return <Loader />;
   }
 
-  console.log(isError);
-
-  if (isError) {
-    toast.error("Error fetching data");
-  }
-
   return (
     <div className="mx-auto max-w-4xl pb-5">
       <Card heading={"Add Product"}>
         <form onSubmit={handleSubmit(submitHandler)}>
           <div className="space-y-4">
-            <label className="-mb-2 block pl-2 capitalize tracking-widest">
-              Shop
-            </label>
-            <SearchFilter
-              errors={errors}
-              field="shopId"
-              setValue={setValue}
-              options={shops || []}
-              value={getValues().shopId}
-            />
             <InputField
               label="Title"
               name="title"

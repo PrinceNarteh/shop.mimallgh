@@ -1,9 +1,9 @@
 import axios from "@/lib/axios";
 
-export const login = async (data: { email: string; password: string }) => {
+export const login = async (data: { shopCode: string; password: string }) => {
   try {
     const user = await axios.post("/shop-auth/login", data);
-    return user.data;
+    return user;
   } catch (error) {}
 };
 

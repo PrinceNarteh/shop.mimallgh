@@ -2,18 +2,33 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const Login = () => {
   const { handleSubmit, register } = useForm();
+  const router = useRouter();
+  const { status } = useSession();
 
-  const onSubmit = handleSubmit((data) => {
-    signIn("credentials", {
+  const onSubmit = handleSubmit(async (data) => {
+    const res = await signIn("credentials", {
       ...data,
       redirect: false,
       callbackUrl: "/",
     });
+
+    if (res?.status === 200) {
+      toast.success("Login successful");
+      router.push("/");
+    } else {
+      toast.error("Invalid credentials");
+    }
   });
+
+  if (status === "authenticated") {
+    router.push("/");
+  }
 
   return (
     <div className="h-screen flex justify-center items-center bg-slate-200">

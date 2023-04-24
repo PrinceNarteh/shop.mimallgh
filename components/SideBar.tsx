@@ -8,8 +8,6 @@ import { useSession } from "next-auth/react";
 export const SideBar = ({ open }: { open: boolean }) => {
   const { data: session } = useSession();
 
-  console.log(session);
-
   return (
     <div
       className={`fixed top-0 left-0 h-screen  bg-gray-900 ${
@@ -142,9 +140,9 @@ export const SideBar = ({ open }: { open: boolean }) => {
               />
             </div>
             <div className="flex flex-col pl-3">
-              <div className="text-sm text-gray-50">Jane Doeson</div>
+              <div className="text-sm text-gray-50">{session?.user?.name}</div>
               <span className="text-xs font-light tracking-tight text-[#acacb0]">
-                janedoeson@gmail.com
+                {session?.user?.shopCode}
               </span>
             </div>
           </div>

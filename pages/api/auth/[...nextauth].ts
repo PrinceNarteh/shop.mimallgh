@@ -38,17 +38,13 @@ export default NextAuth({
     secret: process.env.NEXTAUTH_SECRET,
   },
   pages: {
-    signIn: "/auth/login", // Displays signin buttons
-    signOut: "/auth/signout", // Displays form with sign out button
-    // error: '/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/auth/verify-request', // Used for check email page
-    // newUser: null // If set, new users will be directed here on first sign in
+    signIn: "/auth/login",
+    signOut: "/auth/signout",
   },
   callbacks: {
-    // async signIn({ user, account, profile, email, credentials }) { return true },
-    // async redirect({ url, baseUrl }) { return baseUrl },
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id;
         token.shopCode = user.shopCode;
         token.location = user.location;
         token.accessToken = user.accessToken;
@@ -61,7 +57,6 @@ export default NextAuth({
       return session;
     },
   },
-
   // Enable debug messages in the console if you are having problems
   debug: false,
 });

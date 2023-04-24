@@ -3,8 +3,13 @@ import React from "react";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { menus } from "../utils/menus";
+import { useSession } from "next-auth/react";
 
 export const SideBar = ({ open }: { open: boolean }) => {
+  const { data: session } = useSession();
+
+  console.log(session);
+
   return (
     <div
       className={`fixed top-0 left-0 h-screen  bg-gray-900 ${

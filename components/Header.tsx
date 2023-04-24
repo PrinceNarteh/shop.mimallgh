@@ -1,6 +1,7 @@
 import React from "react";
 import { GoThreeBars } from "react-icons/go";
 import { BiSearch } from "react-icons/bi";
+import { signOut } from "next-auth/react";
 
 export const Header = ({ open, setOpen }) => {
   return (
@@ -13,7 +14,7 @@ export const Header = ({ open, setOpen }) => {
       />
       <div className="flex items-center">
         {/* Search  */}
-        <div className="px-6">
+        <div className="px-6 flex items-center gap-5">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
               <BiSearch />
@@ -24,6 +25,9 @@ export const Header = ({ open, setOpen }) => {
               placeholder="search"
             />
           </div>
+          <button onClick={() => signOut({ callbackUrl: "/auth/login" })}>
+            Logout
+          </button>
         </div>
       </div>
     </div>

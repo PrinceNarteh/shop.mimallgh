@@ -47,8 +47,19 @@ export default NextAuth({
   callbacks: {
     // async signIn({ user, account, profile, email, credentials }) { return true },
     // async redirect({ url, baseUrl }) { return baseUrl },
-    // async session({ session, token, user }) { return session },
-    // async jwt({ token, user, account, profile, isNewUser }) { return token }
+    async jwt({ token, user }) {
+      if (user) {
+        token.shopCode = user.shopCode;
+        token.location = user.location;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      session.user = token as any;
+      return session;
+    },
   },
 
   // Enable debug messages in the console if you are having problems

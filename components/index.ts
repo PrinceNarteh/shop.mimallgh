@@ -1,4 +1,5 @@
 export { AddProductForm } from "./AddProduct";
+export { Back } from "./Back";
 export { Button } from "./Button";
 export { Card } from "./Card";
 export { CartItem } from "./CartItem";

@@ -1,9 +1,20 @@
-import Image from "next/image";
-import { BiSearch } from "react-icons/bi";
-import { products } from "@/data/data";
 import { Card, Status } from "@/components";
+import { axiosAuth } from "@/lib/axios";
+import { Product } from "@/types/product";
+import { capitalize } from "@/utils/utilities";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { BiSearch } from "react-icons/bi";
 
-const page = () => {
+interface IPage {
+  products: Product[];
+}
+
+const page = ({ products }: IPage) => {
+  const router = useRouter();
+
+  const handleClick = (id: string) => router.push(`/products/${id}`);
+
   return (
     <div className="mx-auto max-w-7xl">
       <Card heading="Product List">
@@ -32,8 +43,11 @@ const page = () => {
           <tbody className="border-separate border-spacing-10 space-y-20">
             {products.map((product, idx) => (
               <tr
-                className={`${idx % 2 === 0 && "bg-gray-500 bg-opacity-20"}`}
+                className={`${
+                  idx % 2 === 0 && "bg-gray-500 bg-opacity-20"
+                } cursor-pointer`}
                 key={idx}
+                onClick={() => handleClick(product.id)}
               >
                 <td className="py-7 text-center">
                   <input type="checkbox" name="" id="" />
@@ -42,21 +56,22 @@ const page = () => {
                   <div className="flex items-center gap-5">
                     <div className="relative h-12 w-12">
                       <Image
-                        src={product.image}
+                        src={product.images[0]?.secure_url}
                         style={{ objectFit: "contain" }}
-                        alt={product.name}
+                        alt={product.title}
                         height="48"
+                        width="48"
                       />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold">{product.name}</h3>
-                      <p className="text-md">
-                        ID: {product.id} | SKU: {product.SKU}
-                      </p>
+                      <h3 className="text-xl font-semibold">{product.title}</h3>
+                      <p className="text-md">ID: {product.id} | SKU:</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-2 text-center">{product.category}</td>
+                <td className="px-2 text-center">
+                  {capitalize(product.category)}
+                </td>
                 <td className="px-2 text-center">
                   <Status
                     variant={product.stock === 0 ? "danger" : "success"}
@@ -73,5 +88,15 @@ const page = () => {
     </div>
   );
 };
+
+// This gets called on every request
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const res = await axiosAuth.get("/products");
+  const products = await res.data;
+
+  // Pass data to the page via props
+  return { props: { products } };
+}
 
 export default page;

@@ -9,7 +9,7 @@ type ICategory =
   | "tech";
 
 export type Product = {
-  id: String;
+  id: string;
   title: string;
   description: string;
   price: number;

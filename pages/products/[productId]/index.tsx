@@ -1,15 +1,15 @@
+import { Back, Card, Loader } from "@/components";
+import { getProduct } from "@/services/products";
+import { Product } from "@/types/product";
+import { capitalize } from "@/utils/utilities";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Back, Loader, Card } from "@/components";
-import { capitalize } from "@/utils/utilities";
 import { useEffect, useState } from "react";
-import { getProduct } from "@/services/products";
-import { ICreateProduct } from "@/utils/validations";
 
 const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<ICreateProduct | null>(null);
+  const [data, setData] = useState<Product | null>(null);
 
   const {
     query: { productId },

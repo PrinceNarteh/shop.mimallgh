@@ -5,7 +5,6 @@ export const IdDto = z.object({
 });
 
 export const createProductDto = z.object({
-  id: z.union([z.string().cuid2(), z.null()]),
   shopId: z.string().cuid2(),
   title: z.string(),
   description: z
@@ -51,7 +50,5 @@ export const createProductDto = z.object({
 
 export type ICreateProduct = z.infer<typeof createProductDto>;
 
-export const updateProductDto = createProductDto.partial().extend({
-  id: z.string().cuid2(),
-});
+export const updateProductDto = createProductDto.partial();
 export type IUpdateProduct = z.infer<typeof updateProductDto>;

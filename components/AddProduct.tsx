@@ -16,7 +16,6 @@ import { convertBase64 } from "@/utils/utilities";
 import { createProduct, updateProduct } from "@/services/products";
 
 const initialValues: ICreateProduct = {
-  id: "",
   brand: "",
   category: "food",
   description: "",
@@ -140,8 +139,8 @@ export const AddProductForm = () => {
             images: res,
           };
 
-          if (data.id) {
-            updateProduct(newData);
+          if (productId) {
+            updateProduct(productId as string, newData);
           } else {
             createProduct(newData);
           }
@@ -329,9 +328,7 @@ export const AddProductForm = () => {
               accept=".png, .jpg, .jpeg"
             ></input>
           </div>
-          <Button type="submit">
-            {getValues()?.id ? "Edit" : "Add"} Product
-          </Button>
+          <Button type="submit">{productId ? "Edit" : "Add"} Product</Button>
         </form>
       </Card>
       {openDialog ? (

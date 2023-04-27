@@ -1,14 +1,10 @@
-import { Back, Card, Loader } from "@/components";
-import { axiosAuth } from "@/lib/axios";
-import { allProducts, getProduct } from "@/services/products";
+import { Back, Card } from "@/components";
+import { getProduct } from "@/services/products";
 import { Product } from "@/types/product";
 import { capitalize } from "@/utils/utilities";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { productId } = context.query;
@@ -22,19 +18,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<Product | null>(null);
-
-  console.log(product);
-
-  const {
-    query: { productId },
-  } = useRouter();
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <div className="mx-auto w-11/12 space-y-3 pb-5">
       <Back />
@@ -91,7 +74,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div>
       </Card>
       <div className="flex justify-end gap-5">
-        <Link href={`/products/${data?.id}/edit`} className="link">
+        <Link href={`/products/${product?.id}/edit`} className="link">
           Edit
         </Link>
         <button className="bg-red-500 py-2 px-4">Delete</button>

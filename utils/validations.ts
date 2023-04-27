@@ -21,19 +21,14 @@ export const createProductDto = z.object({
     .string({ required_error: "Brand is required" })
     .min(2, "Brand should be 2 or more characters"),
   category: z.enum([
-    "accommodations_and_building",
-    "fashion_and_wears",
     "food",
-    "furniture",
+    "fashion_and_wears",
     "grocery_and_general",
     "health_and_wellness",
-    "home_and_electricals",
-    "money_and_energy",
-    "personal-care_and_beauty",
-    "recreation",
-    "stationery_and_printing",
+    "home_and_electrical_appliances",
+    "personal_services",
+    "printing_and_stationery",
     "tech",
-    "transport_and_machines",
   ]),
   ratings: z
     .number()

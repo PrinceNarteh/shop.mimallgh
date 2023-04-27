@@ -7,13 +7,13 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import { Product } from "@/types/product";
 import { categories } from "@/utils/menus";
+import { convertBase64 } from "@/utils/utilities";
 import { deleteProductImage } from "../utils/deleteProductImage";
 import { ICreateProduct } from "../utils/validations";
-import { SelectOption } from "./SelectOption";
-import { Button, Card, InputField, Loader, Modal, SearchFilter } from "./index";
-import { convertBase64 } from "@/utils/utilities";
-import { createProduct, updateProduct } from "@/services/products";
+import { Button, Card, InputField, Modal, SelectOption } from "./index";
 
 const initialValues: ICreateProduct = {
   brand: "",
@@ -27,7 +27,7 @@ const initialValues: ICreateProduct = {
   images: [],
 };
 
-export const AddProductForm = () => {
+export const AddProductForm = ({ product }: { product?: Product }) => {
   const {
     query: { productId },
     push,
@@ -38,16 +38,15 @@ export const AddProductForm = () => {
     formState: { errors },
     setValue,
     getValues,
-    reset,
     handleSubmit,
   } = useForm<ICreateProduct>({
-    defaultValues: initialValues,
+    defaultValues: product ? product : initialValues,
   });
-  const setFetchAgain = useState(true)[1];
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [publicId, setPublicId] = useState("");
+  const axiosAuth = useAxiosAuth();
 
   const selectedImages = (e: ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = e.target.files;
@@ -109,7 +108,7 @@ export const AddProductForm = () => {
     }
   }
 
-  const submitHandler: SubmitHandler<ICreateProduct> = (data) => {
+  const submitHandler: SubmitHandler<ICreateProduct> = async (data) => {
     const toastId = toast.loading("Loading");
     const imageUrls = [];
 
@@ -121,37 +120,56 @@ export const AddProductForm = () => {
       formData.append("file", images[i] as File);
       imageUrls[i] = axios.post(
         "https://api.cloudinary.com/v1_1/prinart/image/upload",
-        formData
+        formData,
+        { headers: { "X-Requested-With": "XMLHttpRequest" } }
       );
     }
 
     try {
-      Promise.all(imageUrls)
-        .then((res) => {
-          return res.map((item) => ({
-            public_id: item.data.public_id,
-            secure_url: item.data.secure_url,
-          }));
-        })
-        .then((res) => {
-          const newData = {
-            ...data,
-            images: res,
-          };
+      let imagesArr: {
+        public_id: any;
+        secure_url: any;
+      }[] = [];
 
-          if (productId) {
-            updateProduct(productId as string, newData);
-          } else {
-            createProduct(newData);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      await Promise.all(imageUrls).then((res) => {
+        imagesArr = res.map((item) => ({
+          public_id: item.data.public_id,
+          secure_url: item.data.secure_url,
+        }));
+      });
+
+      const newData = {
+        ...data,
+        images: [...data.images, ...imagesArr],
+      };
+
+      console.log(data.images);
+
+      // if (productId) {
+      //   const res = await axiosAuth.patch(`/products/${productId}`, newData);
+      //   if (res.status === 200) {
+      //     toast.success("Product updated successfully");
+      //     push(`/products/${productId}`);
+      //   } else {
+      //     toast.error("Error updating product");
+      //   }
+      // } else {
+      //   const res = await axiosAuth.post("/products", newData);
+      //   if (res.status === 201) {
+      //     toast.success("Product created successfully");
+      //     push(`/products/${res.data.id}`);
+      //   } else {
+      //     toast.error("Error updating product");
+      //   }
+      // }
     } catch (error) {
       console.log(error);
+    } finally {
+      toast.dismiss(toastId);
     }
   };
+
+  console.log(errors);
 
   return (
     <div className="mx-auto max-w-4xl pb-5">
@@ -251,7 +269,7 @@ export const AddProductForm = () => {
                     >
                       <AiOutlineCloseCircle
                         onClick={() => deleteImage(image.public_id)}
-                        className="absolute -right-2 -top-2 z-10 cursor-pointer rounded-full bg-white text-2xl text-orange-500"
+                        className="absolute -right-2 -top-2 z-0 cursor-pointer rounded-full bg-white text-2xl text-orange-500"
                       />
                       <div className="overflow-hidden">
                         <Image

@@ -10,7 +10,7 @@ interface IPage {
   products: Product[];
 }
 
-const page = ({ products }: IPage) => {
+const ProductList = ({ products }: IPage) => {
   const router = useRouter();
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
@@ -99,4 +99,4 @@ export async function getServerSideProps() {
   return { props: { products } };
 }
 
-export default page;
+export default ProductList;

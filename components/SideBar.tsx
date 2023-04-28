@@ -4,6 +4,7 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { menus } from "../utils/menus";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export const SideBar = ({ open }: { open: boolean }) => {
   const { data: session } = useSession();
@@ -19,28 +20,9 @@ export const SideBar = ({ open }: { open: boolean }) => {
           <div className="flex items-center justify-between">
             <a
               href="#"
-              className="flex items-center justify-center rounded bg-blue-600 p-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="flex items-center justify-center rounded bg-white p-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
-              <svg
-                className="h-5 w-5 stroke-current text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M12 4.75L19.25 9L12 13.25L4.75 9L12 4.75Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-                <path
-                  d="M9.25 12L4.75 15L12 19.25L19.25 15L14.6722 12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
+              <Image src={"/logo.png"} alt="logo" width={30} height={30} />
             </a>
           </div>
           <div className="px-6 pt-4">
@@ -133,11 +115,7 @@ export const SideBar = ({ open }: { open: boolean }) => {
         <div className="flex items-center justify-between bg-[#232529] py-4 pl-6 pr-4">
           <div className="flex items-center">
             <div className="relative h-8 w-8 rounded-full before:absolute before:right-0 before:bottom-0 before:h-2 before:w-2 before:rounded-full before:bg-green-500 before:ring-1 before:ring-white">
-              <img
-                className="rounded-full"
-                src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
-                alt="profile"
-              />
+              <Image src={"/logo.png"} alt="logo" width={70} height={70} />
             </div>
             <div className="flex flex-col pl-3">
               <div className="text-sm text-gray-50">{session?.user?.name}</div>

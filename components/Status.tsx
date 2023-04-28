@@ -1,6 +1,11 @@
 import React from "react";
 
-export const Status = ({ variant = "success", children }) => {
+interface IStatus {
+  variant: "success" | "primary" | "danger";
+  children: React.ReactNode;
+}
+
+export const Status = ({ variant = "success", children }: IStatus) => {
   let color = "";
 
   switch (variant) {

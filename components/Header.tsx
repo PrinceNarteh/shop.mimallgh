@@ -3,7 +3,12 @@ import { GoThreeBars } from "react-icons/go";
 import { BiSearch } from "react-icons/bi";
 import { signOut } from "next-auth/react";
 
-export const Header = ({ open, setOpen }) => {
+interface IHeader {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const Header = ({ open, setOpen }: IHeader) => {
   return (
     <div
       className={`sticky top-0 flex justify-between bg-dark-gray z-50 px-5 py-2 duration-300`}

@@ -52,7 +52,7 @@ export const SearchFilter = ({
       shouldValidate: true,
       shouldTouch: true,
     });
-  }, [selected]);
+  }, [selected, setValue, field]);
 
   return (
     <div className="relative w-full font-medium">

@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import apple from "../../../../assets/images/red-apple.png";
-import user from "../../../../assets/images/user-1.jpg";
 
 const OrderDetails = () => {
   return (
@@ -28,7 +26,7 @@ const OrderDetails = () => {
                     <div className="flex items-center">
                       <Image
                         className="mr-5"
-                        src={apple}
+                        src={""}
                         width={40}
                         height={40}
                         alt="apple"
@@ -45,7 +43,7 @@ const OrderDetails = () => {
                     <div className="flex items-center">
                       <Image
                         className="mr-5"
-                        src={apple}
+                        src={""}
                         width={40}
                         height={40}
                         alt="Red Apple"
@@ -62,7 +60,7 @@ const OrderDetails = () => {
                     <div className="flex items-center">
                       <Image
                         className="mr-5"
-                        src={apple}
+                        src={""}
                         width={40}
                         height={40}
                         alt=""
@@ -79,7 +77,7 @@ const OrderDetails = () => {
                     <div className="flex items-center">
                       <Image
                         className="mr-5"
-                        src={apple}
+                        src={""}
                         width={40}
                         height={40}
                         alt=""
@@ -127,7 +125,7 @@ const OrderDetails = () => {
             </div>
             <div className="flex items-center">
               <Image
-                src={user}
+                src={""}
                 width={50}
                 height={50}
                 className="mr-3 rounded-full"

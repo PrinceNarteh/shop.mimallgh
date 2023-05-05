@@ -1,8 +1,8 @@
 import { login } from "@/services/auth";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -59,4 +59,6 @@ export default NextAuth({
   },
   // Enable debug messages in the console if you are having problems
   debug: false,
-});
+};
+
+export default NextAuth(authOptions);

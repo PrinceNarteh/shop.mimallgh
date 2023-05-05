@@ -1,35 +1,19 @@
+import { getOrders } from "@/services/orders";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React from "react";
 import { BiSearch } from "react-icons/bi";
 
-const orders = [
-  {
-    no: 21,
-    ref: "RAG12G",
-    customer: "John Doe",
-    date: "21 Jun 23",
-    status: "Paid",
-    amount: 1234.0,
-  },
-  {
-    no: 22,
-    ref: "	TAG19G",
-    customer: "Rose Smith",
-    date: "22 Jun 23",
-    status: "Paid",
-    amount: 2234.0,
-  },
-  {
-    no: 23,
-    ref: "	EAB12G",
-    customer: "Jane Doe",
-    date: "23 Jun 23",
-    status: "Paid",
-    amount: 1205.0,
-  },
-];
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const data = await getOrders("/orders");
 
-const Orders = () => {
+  return {
+    props: {
+      orders: data,
+    },
+  };
+};
+
+const Orders = ({ orders }: { orders: any[] }) => {
   const router = useRouter();
 
   return (
@@ -64,7 +48,7 @@ const Orders = () => {
           <tbody>
             {orders.map((order, idx) => (
               <tr
-              key={idx}
+                key={idx}
                 onClick={() => router.push(`/orders/${order.no}`)}
                 className="cursor-pointer rounded bg-light-gray"
               >

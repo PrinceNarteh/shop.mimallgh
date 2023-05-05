@@ -18,6 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const ProductDetails = ({ product }: { product: Product }) => {
+  console.log(product);
   return (
     <div className="mx-auto w-11/12 space-y-3 pb-5">
       <Back />

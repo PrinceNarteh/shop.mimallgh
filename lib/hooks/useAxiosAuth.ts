@@ -10,6 +10,7 @@ const useAxiosAuth = () => {
   useEffect(() => {
     const requestIntercept = axiosAuth.interceptors.request.use(
       (config: any) => {
+        console.log(config);
         if (!config.headers["Authorization"]) {
           config.headers[
             "Authorization"

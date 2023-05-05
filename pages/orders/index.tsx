@@ -1,20 +1,27 @@
+import { Loader } from "@/components";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { getOrders } from "@/services/orders";
 import { GetServerSideProps } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const data = await getOrders("/orders");
-
-  return {
-    props: {
-      orders: data,
-    },
-  };
-};
-
-const Orders = ({ orders }: { orders: any[] }) => {
+const Orders = () => {
+  const [orders, setOrders] = useState([]);
+  const axiosAuth = useAxiosAuth();
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axiosAuth.get(`orders/${session?.user?.id}/shop`);
+      setOrders(res.data);
+    };
+    if (status === "authenticated") {
+      fetchData();
+    }
+  }, [status]);
 
   return (
     <div className="mx-auto max-w-5xl">

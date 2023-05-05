@@ -7,11 +7,19 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import _ from "lodash";
+import { format } from "date-fns";
 
 interface IOrder {
   date: string;
   items: { orderId: string; orderItems: any[] }[];
 }
+
+const calculatePrice = (items: any[]) => {
+  return items.reduce(
+    (amt, curItem) => amt + curItem.price * curItem.quantity,
+    0
+  );
+};
 
 const Orders = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -27,6 +35,13 @@ const Orders = () => {
       setLoading(true);
       const { data } = await axiosAuth.get(`orders/${session?.user?.id}/shop`);
       let res = _.chain(data)
+        .map((item) => {
+          console.log(item);
+          return {
+            ...item,
+            createdAt: format(new Date(item.createdAt), "do LLL yyyy"),
+          };
+        })
         .groupBy("createdAt")
         .map((value, i) => ({
           date: i,
@@ -74,7 +89,7 @@ const Orders = () => {
               <th className="w-40">Customer</th>
               <th className=" w-40">Date</th>
               <th className=" w-40">Status</th>
-              <th className=" w-20 pr-5">Total</th>
+              <th className=" w-20 pr-5">Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -83,22 +98,24 @@ const Orders = () => {
                 <tr>
                   <td colSpan={4}>{orderItem.date}</td>
                 </tr>
-                {orderItem.items.map((item, i) => (
+                {orderItem.items.map((item) => (
                   <tr
                     key={idx}
-                    onClick={() => router.push(`/orders/${orderItem.no}`)}
+                    onClick={() =>
+                      router.push(
+                        `/orders/${orderItem.items[0].orderItems[0].orderId}`
+                      )
+                    }
                     className="cursor-pointer rounded bg-light-gray"
                   >
                     <td className="py-5 text-center ">{idx + 1}</td>
-                    <td className="py-5 text-center ">
-                      {orderItem.items[0].orderId}
-                    </td>
+                    <td className="py-5 text-center ">{item.orderId}</td>
                     <td className="py-5 text-center">{item.user}</td>
-                    {/* <td className="py-5 text-center ">{orderItem.date}</td>
-                    <td className="py-5 text-center ">{orderItem.status}</td>
+                    <td className="py-5 text-center ">{orderItem.date}</td>
+                    <td className="py-5 text-center ">{""}</td>
                     <td className="py-5 pr-5 text-center">
-                      {orderItem.amount}
-                    </td> */}
+                      {calculatePrice(item.orderItems)}
+                    </td>
                   </tr>
                 ))}
               </>

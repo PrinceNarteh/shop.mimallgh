@@ -1,15 +1,39 @@
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import calculatePrice from "@/utils/calculatePrice";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 
 const OrderDetails = () => {
+  const [order, setOrder] = useState([]);
+  const axiosAuth = useAxiosAuth();
+  const { data: session, status } = useSession();
+  const {
+    query: { orderId },
+  } = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axiosAuth.get(`/orders/${orderId}/order`);
+      setOrder(res.data);
+    };
+
+    if (status === "authenticated") {
+      fetchData();
+    }
+  }, [status]);
+
+  console.log(order[0].Order.user);
+
   return (
     <div className="mx-auto max-w-7xl">
       <h3 className="my-5 text-3xl font-semibold">Order #80249</h3>
       <div className="mb-5 flex items-center divide-x border-y border-y-gray-500 py-5">
         <p className="px-5">January 15, 2023 at 12:30</p>
-        <p className="px-5">4 Items</p>
-        <p className="px-5">Total: $1234.00</p>
+        <p className="px-5">{order.length} Items</p>
+        <p className="px-5">Total: ${calculatePrice(order)}</p>
         <p className="px-5">Paid</p>
       </div>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
@@ -132,7 +156,9 @@ const OrderDetails = () => {
                 alt=""
               />
               <div>
-                <h3 className="text-xl font-bold">John Doe</h3>
+                <h3 className="text-xl font-bold">
+                  {/* {order[0].Order.user.firstName} */}
+                </h3>
                 <p>This is a first order</p>
               </div>
             </div>

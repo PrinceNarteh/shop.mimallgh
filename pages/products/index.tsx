@@ -11,6 +11,7 @@ interface IPage {
 }
 
 const ProductList = ({ products }: IPage) => {
+  console.log(products);
   const router = useRouter();
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
@@ -54,32 +55,27 @@ const ProductList = ({ products }: IPage) => {
                 </td>
                 <td className="px-2">
                   <div className="flex items-center gap-5">
-                    <div className="relative h-12 w-12">
+                    <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden bg-teal-500">
                       <Image
                         src={product.images[0]?.secure_url}
-                        style={{ objectFit: "contain" }}
+                        style={{ objectFit: "cover" }}
                         alt={product.title}
-                        height="48"
-                        width="48"
+                        fill
                       />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold">{product.title}</h3>
-                      <p className="text-md">ID: {product.id} | SKU:</p>
+                      <p className="text-md line-clamp-1">
+                        {product.description}
+                      </p>
                     </div>
                   </div>
                 </td>
                 <td className="px-2 text-center">
                   {capitalize(product.category)}
                 </td>
-                <td className="px-2 text-center">
-                  <Status
-                    variant={product.stock === 0 ? "danger" : "success"}
-                  >{`${
-                    product.stock === 0 ? "Out of" : `${product.stock} in`
-                  } stock`}</Status>
-                </td>
-                <td className="px-2 text-center">10</td>
+                <td className="px-2 text-center">{product.stock} In Stock</td>
+                <td className="px-2 text-center">{product.price}</td>
               </tr>
             ))}
           </tbody>

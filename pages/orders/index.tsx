@@ -8,18 +8,12 @@ import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import _ from "lodash";
 import { format } from "date-fns";
+import calculatePrice from "@/utils/calculatePrice";
 
 interface IOrder {
   date: string;
   items: { orderId: string; orderItems: any[] }[];
 }
-
-const calculatePrice = (items: any[]) => {
-  return items.reduce(
-    (amt, curItem) => amt + curItem.price * curItem.quantity,
-    0
-  );
-};
 
 const Orders = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -28,15 +22,13 @@ const Orders = () => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
 
-  console.log(session?.user?.id);
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const { data } = await axiosAuth.get(`orders/${session?.user?.id}/shop`);
+      console.log(data);
       let res = _.chain(data)
         .map((item) => {
-          console.log(item);
           return {
             ...item,
             createdAt: format(new Date(item.createdAt), "do LLL yyyy"),
@@ -56,7 +48,6 @@ const Orders = () => {
         }))
         .value();
       setOrders(res);
-      console.log(res);
       setLoading(false);
     };
     if (status === "authenticated") {

@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ProductDetails = ({ product }: { product: Product }) => {
   console.log(product);
   return (
-    <div className="mx-auto w-11/12 space-y-3 pb-5 my-10">
+    <div className="mx-auto w-11/12 space-y-3 pb-5 py-10">
       <Back />
       <Card heading="Product Detail">
         <h3 className="mb-2 text-2xl font-semibold">{product?.title}</h3>
@@ -65,7 +65,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               value={`${capitalize((product?.category as string) || "")}`}
               dark
             />
-            <Item label="Shop" value={`${product?.shopId || ""}`} />
+            <Item label="Shop" value={`${product?.shop.name || ""}`} />
             <div className={`bg-dark-gray py-4 px-4`}>
               <div className="mb-3 font-bold">Description</div>
               <div className="line-clamp-5">{product?.description || ""}</div>

@@ -9,19 +9,20 @@ type ICategory =
   | "tech";
 
 export type Product = {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  stock: number;
   brand: string;
-  category: ICategory;
-  rating: number[];
-  shopId: string;
+  category: string;
+  createdAt: string;
+  description: string;
+  discountPercentage: number;
+  id: string;
   images: {
     id: string;
     public_id: string;
     secure_url: string;
   }[];
+  price: number;
+  shop: { id: string; shopCode: string; name: string };
+  stock: number;
+  title: string;
+  updatedAt: string;
 };

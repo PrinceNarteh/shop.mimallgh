@@ -14,24 +14,7 @@ interface IPage {
     perPage: number;
     total: number;
     totalPages: number;
-    data: {
-      brand: string;
-      category: string;
-      createdAt: string;
-      description: string;
-      discountPercentage: number;
-      id: string;
-      images: {
-        id: string;
-        public_id: string;
-        secure_url: string;
-      }[];
-      price: number;
-      shop: { id: string; shopCode: string; name: string };
-      stock: number;
-      title: string;
-      updatedAt: string;
-    }[];
+    data: Product[];
   };
 }
 

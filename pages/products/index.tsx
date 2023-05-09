@@ -1,4 +1,5 @@
 import { Card, Status } from "@/components";
+import Pagination from "@/components/Pagination";
 import { axiosAuth } from "@/lib/axios";
 import { Product } from "@/types/product";
 import { capitalize } from "@/utils/utilities";
@@ -81,6 +82,9 @@ const ProductList = ({ products }: IPage) => {
           </tbody>
         </table>
       </Card>
+      <div className="flex justify-center">
+        <Pagination />
+      </div>
     </div>
   );
 };

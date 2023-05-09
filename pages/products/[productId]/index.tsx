@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ProductDetails = ({ product }: { product: Product }) => {
   console.log(product);
   return (
-    <div className="mx-auto w-11/12 space-y-3 pb-5">
+    <div className="mx-auto w-11/12 space-y-3 pb-5 my-10">
       <Back />
       <Card heading="Product Detail">
         <h3 className="mb-2 text-2xl font-semibold">{product?.title}</h3>
@@ -31,7 +31,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 src={product?.images[0]?.secure_url as string}
                 sizes="400"
                 fill
-                style={{ objectFit: "contain" }}
+                style={{ objectFit: "cover" }}
                 alt=""
                 priority
               />
@@ -45,8 +45,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <Image
                     src={image.secure_url}
                     fill
-                    sizes="100"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "cover" }}
                     alt=""
                   />
                 </div>

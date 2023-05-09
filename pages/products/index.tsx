@@ -5,14 +5,39 @@ import { Product } from "@/types/product";
 import { capitalize } from "@/utils/utilities";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 
 interface IPage {
-  products: Product[];
+  products: {
+    page: number;
+    perPage: number;
+    total: number;
+    totalPages: number;
+    data: {
+      brand: string;
+      category: string;
+      createdAt: string;
+      description: string;
+      discountPercentage: number;
+      id: string;
+      images: {
+        id: string;
+        public_id: string;
+        secure_url: string;
+      }[];
+      price: number;
+      shop: { id: string; shopCode: string; name: string };
+      stock: number;
+      title: string;
+      updatedAt: string;
+    }[];
+  };
 }
 
 const ProductList = ({ products }: IPage) => {
-  console.log(products);
+  const [state, setState] = useState(products);
+  console.log(state);
   const router = useRouter();
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
@@ -43,7 +68,7 @@ const ProductList = ({ products }: IPage) => {
           </thead>
 
           <tbody className="border-separate border-spacing-10 space-y-20">
-            {products.map((product, idx) => (
+            {products.data.map((product, idx) => (
               <tr
                 className={`${
                   idx % 2 === 0 && "bg-gray-500 bg-opacity-20"
@@ -61,6 +86,7 @@ const ProductList = ({ products }: IPage) => {
                         src={product.images[0]?.secure_url}
                         style={{ objectFit: "cover" }}
                         alt={product.title}
+                        sizes="48,56"
                         fill
                       />
                     </div>

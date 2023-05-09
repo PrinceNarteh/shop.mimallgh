@@ -22,7 +22,13 @@ export const SideBar = ({ open }: { open: boolean }) => {
               href="#"
               className="flex items-center justify-center rounded bg-white p-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
-              <Image src={"/logo.png"} alt="logo" width={30} height={30} />
+              <Image
+                src={"/logo.png"}
+                alt="logo"
+                width={30}
+                height={30}
+                style={{ width: "auto" }}
+              />
             </a>
           </div>
           <div className="px-6 pt-4">

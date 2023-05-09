@@ -1,22 +1,32 @@
 import { Loader } from "@/components";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import { getOrders } from "@/services/orders";
-import { GetServerSideProps } from "next";
+import { Order } from "@/types/order";
+import calculatePrice from "@/utils/calculatePrice";
+import { format } from "date-fns";
+import _ from "lodash";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import _ from "lodash";
-import { format } from "date-fns";
-import calculatePrice from "@/utils/calculatePrice";
 
 interface IOrder {
+  total: number;
+  page: number;
+  perPage: number;
+  totalPages: number;
   date: string;
-  items: { orderId: string; orderItems: any[] }[];
+  data: Order[];
 }
 
 const Orders = () => {
-  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [orders, setOrders] = useState<IOrder>({
+    data: [],
+    total: 0,
+    page: 1,
+    perPage: 10,
+    totalPages: 1,
+    date: "",
+  });
   const axiosAuth = useAxiosAuth();
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -26,34 +36,15 @@ const Orders = () => {
     const fetchData = async () => {
       setLoading(true);
       const { data } = await axiosAuth.get(`orders/${session?.user?.id}/shop`);
-      console.log(data);
-      let res = _.chain(data)
-        .map((item) => {
-          return {
-            ...item,
-            createdAt: format(new Date(item.createdAt), "do LLL yyyy"),
-          };
-        })
-        .groupBy("createdAt")
-        .map((value, i) => ({
-          date: i,
-          items: _.chain(value)
-            .groupBy("Order.orderId")
-            .map((val, idx) => ({
-              orderId: idx,
-              user: `${val[0].Order.user.firstName} ${val[0].Order.user.lastName}`,
-              orderItems: val,
-            }))
-            .value(),
-        }))
-        .value();
-      setOrders(res);
+      setOrders(data);
       setLoading(false);
     };
     if (status === "authenticated") {
       fetchData();
     }
   }, [status]);
+
+  console.log(orders);
 
   if (loading) return <Loader />;
 
@@ -84,7 +75,7 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((orderItem, idx) => (
+            {orders.data.map((orderItem, idx) => (
               <>
                 <tr>
                   <td colSpan={4}>{orderItem.date}</td>
@@ -93,9 +84,7 @@ const Orders = () => {
                   <tr
                     key={idx}
                     onClick={() =>
-                      router.push(
-                        `/orders/${orderItem.items[0].orderItems[0].orderId}`
-                      )
+                      router.push(`/orders/${orderItem.items[0].order.id}`)
                     }
                     className="cursor-pointer rounded bg-light-gray"
                   >

@@ -10,7 +10,15 @@ type ICategory =
 
 export type Product = {
   brand: string;
-  category: string;
+  category:
+    | "food"
+    | "fashion_and_wears"
+    | "grocery_and_general"
+    | "health_and_wellness"
+    | "home_and_electrical_appliances"
+    | "personal_services"
+    | "printing_and_stationery"
+    | "tech";
   createdAt: string;
   description: string;
   discountPercentage: number;

@@ -14,6 +14,7 @@ import { convertBase64 } from "@/utils/utilities";
 import { deleteProductImage } from "../utils/deleteProductImage";
 import { ICreateProduct } from "../utils/validations";
 import { Button, Card, InputField, Modal, SelectOption } from "./index";
+import { omit } from "lodash";
 
 const initialValues: ICreateProduct = {
   brand: "",
@@ -21,13 +22,13 @@ const initialValues: ICreateProduct = {
   description: "",
   discountPercentage: 0,
   price: 0,
-  shopId: "",
   stock: 0,
   title: "",
   images: [],
 };
 
 export const AddProductForm = ({ product }: { product?: Product }) => {
+  const data = omit(product, ["shop", "createdAt", "updatedAt"]);
   const {
     query: { productId },
     push,
@@ -40,7 +41,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
     getValues,
     handleSubmit,
   } = useForm<ICreateProduct>({
-    defaultValues: product ? product : initialValues,
+    defaultValues: product ? data : initialValues,
   });
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -143,27 +144,25 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
         images: [...data.images, ...imagesArr],
       };
 
-      console.log(data.images);
-
-      // if (productId) {
-      //   const res = await axiosAuth.patch(`/products/${productId}`, newData);
-      //   if (res.status === 200) {
-      //     toast.success("Product updated successfully");
-      //     push(`/products/${productId}`);
-      //   } else {
-      //     toast.error("Error updating product");
-      //   }
-      // } else {
-      //   const res = await axiosAuth.post("/products", newData);
-      //   if (res.status === 201) {
-      //     toast.success("Product created successfully");
-      //     push(`/products/${res.data.id}`);
-      //   } else {
-      //     toast.error("Error updating product");
-      //   }
-      // }
-    } catch (error) {
-      console.log(error);
+      if (productId) {
+        const res = await axiosAuth.patch(`/products/${productId}`, newData);
+        if (res.status === 200) {
+          toast.success("Product updated successfully");
+          push(`/products/${productId}`);
+        } else {
+          toast.error("Error updating product");
+        }
+      } else {
+        const res = await axiosAuth.post("/products", newData);
+        if (res.status === 201) {
+          toast.success("Product created successfully");
+          push(`/products/${res.data.id}`);
+        } else {
+          toast.error("Error updating product");
+        }
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       toast.dismiss(toastId);
     }
@@ -276,7 +275,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
                           src={image.secure_url}
                           style={{ objectFit: "contain" }}
                           alt=""
-                          sizes="128"
+                          sizes="128px"
                           fill
                           className="rounded"
                         />
@@ -317,8 +316,8 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
                   <div className="overflow-hidden">
                     <Image
                       src={image}
-                      width="128"
-                      height="128"
+                      fill
+                      sizes="128px"
                       style={{ objectFit: "cover" }}
                       alt=""
                       className="rounded"

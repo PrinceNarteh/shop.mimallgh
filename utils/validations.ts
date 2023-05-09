@@ -4,19 +4,31 @@ export const IdDto = z.object({
   id: z.string({ required_error: "ID is required" }).cuid(),
 });
 
+// {
+//   brand: string;
+//   category: string;
+//   createdAt: string;
+//   description: string;
+//   discountPercentage: number;
+//   id: string;
+//   images: {
+//     id: string;
+//     public_id: string;
+//     secure_url: string;
+//   }
+//   [];
+//   price: number;
+//   shop: {
+//     id: string;
+//     shopCode: string;
+//     name: string;
+//   }
+//   stock: number;
+//   title: string;
+//   updatedAt: string;
+// }
+
 export const createProductDto = z.object({
-  shopId: z.string().cuid2(),
-  title: z.string(),
-  description: z
-    .string({ required_error: "Description is required" })
-    .min(2, "Description should be 2 or more characters"),
-  price: z
-    .number({ required_error: "Price is required" })
-    .gte(0, "Price cannot be negative"),
-  discountPercentage: z.number().gte(0, "Price cannot be negative").optional(),
-  stock: z
-    .number({ required_error: "Stock is required" })
-    .gte(0, "Price cannot be negative"),
   brand: z
     .string({ required_error: "Brand is required" })
     .min(2, "Brand should be 2 or more characters"),
@@ -30,11 +42,19 @@ export const createProductDto = z.object({
     "printing_and_stationery",
     "tech",
   ]),
-  ratings: z
-    .number()
-    .min(1, "Minimum rating should be 1")
-    .max(5, "Maximum rating should be 5")
-    .optional(),
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(2, "Title should be 2 or more characters"),
+  description: z
+    .string({ required_error: "Description is required" })
+    .min(2, "Description should be 2 or more characters"),
+  discountPercentage: z.number().gte(0, "Price cannot be negative").optional(),
+  price: z
+    .number({ required_error: "Price is required" })
+    .gte(0, "Price cannot be negative"),
+  stock: z
+    .number({ required_error: "Stock is required" })
+    .gte(0, "Price cannot be negative"),
   images: z.array(
     z.object({
       public_id: z.string(),
@@ -42,6 +62,12 @@ export const createProductDto = z.object({
     })
   ),
 });
+
+// ratings: z
+//     .number()
+//     .min(1, "Minimum rating should be 1")
+//     .max(5, "Maximum rating should be 5")
+//     .optional(),
 
 export type ICreateProduct = z.infer<typeof createProductDto>;
 

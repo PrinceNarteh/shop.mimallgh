@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
@@ -10,8 +10,12 @@ const Login = () => {
   const { handleSubmit, register } = useForm();
   const router = useRouter();
   const { status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
+    const toastId = toast.loading("Loading...");
+    setIsLoading(true);
+
     const res = await signIn("credentials", {
       ...data,
       redirect: false,
@@ -19,9 +23,13 @@ const Login = () => {
     });
 
     if (res?.status === 200) {
+      toast.dismiss(toastId);
       toast.success("Login successful");
+      setIsLoading(false);
       router.push("/");
     } else {
+      toast.dismiss(toastId);
+      setIsLoading(false);
       toast.error("Invalid credentials");
     }
   });
@@ -65,6 +73,7 @@ const Login = () => {
             {...register("password")}
           />
           <input
+            disabled={isLoading}
             type="submit"
             value="Login"
             className="bg-green-800 text-white w-full py-3 text-lg rounded cursor-pointer"

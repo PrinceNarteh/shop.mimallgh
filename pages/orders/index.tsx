@@ -1,52 +1,54 @@
 import { Loader } from "@/components";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import { Order } from "@/types/order";
+import { IOrder } from "@/types/order";
 import calculatePrice from "@/utils/calculatePrice";
 import { format } from "date-fns";
 import _ from "lodash";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { BiSearch } from "react-icons/bi";
 
-interface IOrder {
-  total: number;
-  page: number;
-  perPage: number;
-  totalPages: number;
-  date: string;
-  data: Order[];
-}
+// interface IOrder {
+//   total: number;
+//   page: number;
+//   perPage: number;
+//   totalPages: number;
+//   data: {
+//     date: string;
+//     items: Order[];
+//   }[];
+// }
 
 const Orders = () => {
-  const [orders, setOrders] = useState<IOrder>({
-    data: [],
-    total: 0,
-    page: 1,
-    perPage: 10,
-    totalPages: 1,
-    date: "",
-  });
+  const [orders, setOrders] = useState<IOrder>();
   const axiosAuth = useAxiosAuth();
   const router = useRouter();
-  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data } = await axiosAuth.get(`orders/${session?.user?.id}/shop`);
-      setOrders(data);
-      setLoading(false);
+      try {
+        const { data } = await axiosAuth.get(
+          `orders/${session?.user?.id}/shop`
+        );
+        console.log(data);
+        setOrders(data);
+      } catch (error: any) {
+        toast.error("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
     };
     if (status === "authenticated") {
       fetchData();
     }
-  }, [status]);
+  }, [status, axiosAuth, session]);
 
-  console.log(orders);
-
-  if (loading) return <Loader />;
+  if (loading || !orders) return <Loader />;
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -63,7 +65,7 @@ const Orders = () => {
         </div>
       </div>
       <div className="w-full py-4 px-2">
-        <table className="w-full border-separate border-spacing-y-7">
+        <table className="w-full border-separate border-spacing-y-4">
           <thead>
             <tr>
               <th className=" w-20">No</th>
@@ -75,30 +77,35 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.data.map((orderItem, idx) => (
-              <>
+            {orders?.data?.map((order, idx) => (
+              <React.Fragment key={idx}>
                 <tr>
-                  <td colSpan={4}>{orderItem.date}</td>
+                  <td colSpan={4}>{order.date}</td>
                 </tr>
-                {orderItem.items.map((item) => (
+                {order.items.map((item, i) => (
                   <tr
-                    key={idx}
+                    key={i}
                     onClick={() =>
-                      router.push(`/orders/${orderItem.items[0].order.id}`)
+                      router.push(`/orders/${order.items[0].orderId}`)
                     }
                     className="cursor-pointer rounded bg-light-gray"
                   >
-                    <td className="py-5 text-center ">{idx + 1}</td>
+                    <td className="py-5 text-center ">{i + 1}</td>
                     <td className="py-5 text-center ">{item.orderId}</td>
-                    <td className="py-5 text-center">{item.user}</td>
-                    <td className="py-5 text-center ">{orderItem.date}</td>
+                    <td className="py-5 text-center">
+                      {item.orderItems[0].order.user.firstName}
+                      {item.orderItems[0].order.user.lastName}
+                    </td>
+                    <td className="py-5 text-center ">
+                      {item.orderItems[0].createdAt}
+                    </td>
                     <td className="py-5 text-center ">{""}</td>
                     <td className="py-5 pr-5 text-center">
                       {calculatePrice(item.orderItems)}
                     </td>
                   </tr>
                 ))}
-              </>
+              </React.Fragment>
             ))}
           </tbody>
         </table>

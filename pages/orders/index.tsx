@@ -2,26 +2,13 @@ import { Loader, OrderListTable } from "@/components";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { IOrder } from "@/types/order";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BiSearch } from "react-icons/bi";
 
-// interface IOrder {
-//   total: number;
-//   page: number;
-//   perPage: number;
-//   totalPages: number;
-//   data: {
-//     date: string;
-//     items: Order[];
-//   }[];
-// }
-
 const Orders = () => {
   const [orders, setOrders] = useState<IOrder>();
   const axiosAuth = useAxiosAuth();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
 

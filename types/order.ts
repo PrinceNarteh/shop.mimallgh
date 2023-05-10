@@ -40,6 +40,7 @@ export interface IOrder {
   totalPages: number;
   data: {
     date: string;
+    user: string;
     orders: {
       orderId: string;
       orderItems: OrderItem[];

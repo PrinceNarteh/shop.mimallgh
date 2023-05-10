@@ -1,4 +1,5 @@
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import { OrderItem } from "@/types/order";
 import calculatePrice from "@/utils/calculatePrice";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -7,7 +8,7 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 
 const OrderDetails = () => {
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState<OrderItem[]>([]);
   const axiosAuth = useAxiosAuth();
   const { data: session, status } = useSession();
   const {
@@ -25,6 +26,7 @@ const OrderDetails = () => {
     }
   }, [status]);
 
+  console.log(order);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -44,75 +46,27 @@ const OrderDetails = () => {
           <div>
             <table className="w-full">
               <tbody>
-                <tr className="border-b border-b-gray-600">
-                  <td className="py-2 pl-4">
-                    <div className="flex items-center">
-                      <Image
-                        className="mr-5"
-                        src={""}
-                        width={40}
-                        height={40}
-                        alt="apple"
-                      />
-                      <span>Red Apple</span>
-                    </div>
-                  </td>
-                  <td className="w-24 text-center">$840.00</td>
-                  <td className="w-20 text-center">1</td>
-                  <td className="w-24 pr-4 text-right">$840.00</td>
-                </tr>
-                <tr className="border-b border-b-gray-600">
-                  <td className="py-2 pl-4">
-                    <div className="flex items-center">
-                      <Image
-                        className="mr-5"
-                        src={""}
-                        width={40}
-                        height={40}
-                        alt="Red Apple"
-                      />
-                      <span>Red Apple</span>
-                    </div>
-                  </td>
-                  <td className="w-24 text-center">$840.00</td>
-                  <td className="w-20 text-center">1</td>
-                  <td className="w-24 pr-4 text-right">$840.00</td>
-                </tr>
-                <tr className="border-b border-b-gray-600">
-                  <td className="py-2 pl-4">
-                    <div className="flex items-center">
-                      <Image
-                        className="mr-5"
-                        src={""}
-                        width={40}
-                        height={40}
-                        alt=""
-                      />
-                      <span>Red Apple</span>
-                    </div>
-                  </td>
-                  <td className="w-24 text-center">$840.00</td>
-                  <td className="w-20 text-center">1</td>
-                  <td className="w-24 pr-4 text-right">$840.00</td>
-                </tr>
-                <tr className="border-b border-b-gray-600">
-                  <td className="py-2 pl-4">
-                    <div className="flex items-center">
-                      <Image
-                        className="mr-5"
-                        src={""}
-                        width={40}
-                        height={40}
-                        alt=""
-                      />
-                      <span>Red Apple</span>
-                    </div>
-                  </td>
-                  <td className="w-24 text-center">$840.00</td>
-                  <td className="w-20 text-center">1</td>
-                  <td className="w-24 pr-4 text-right">$840.00</td>
-                </tr>
-
+                {order.map((item, idx) => (
+                  <tr className="border-b border-b-gray-600">
+                    <td className="py-2 pl-4">
+                      <div className="flex items-center">
+                        <Image
+                          className="mr-5"
+                          src={""}
+                          width={40}
+                          height={40}
+                          alt="apple"
+                        />
+                        <span>{item.productName}</span>
+                      </div>
+                    </td>
+                    <td className="w-24 text-center">{item.price}</td>
+                    <td className="w-20 text-center">{item.quantity}</td>
+                    <td className="w-24 pr-4 text-right">
+                      {(item.price * item.quantity).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
                 {/* TOTAL */}
                 <tr>
                   <td className="py-2 pl-4" colSpan={3}>

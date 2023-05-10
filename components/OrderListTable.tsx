@@ -32,16 +32,15 @@ export const OrderListTable = ({ orders }: { orders: IOrder }) => {
                   <tr
                     key={i}
                     onClick={() =>
-                      router.push(`/orders/${order.orders[0].orderId}`)
+                      router.push(
+                        `/orders/${order.orders[0].orderItems[0].order.id}`
+                      )
                     }
                     className="cursor-pointer rounded bg-light-gray"
                   >
                     <td className="py-5 text-center ">{i + 1}</td>
                     <td className="py-5 text-center ">{item.orderId}</td>
-                    <td className="py-5 text-center">
-                      {item.orderItems[0].order.user.firstName}
-                      {item.orderItems[0].order.user.lastName}
-                    </td>
+                    <td className="py-5 text-center">{order.user}</td>
                     <td className="py-5 text-center ">
                       {item.orderItems[0].createdAt}
                     </td>

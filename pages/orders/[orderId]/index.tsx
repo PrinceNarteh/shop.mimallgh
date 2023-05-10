@@ -24,9 +24,7 @@ const OrderDetails = () => {
     if (status === "authenticated") {
       fetchData();
     }
-  }, [status]);
-
-  console.log(order);
+  }, [status, axiosAuth, orderId]);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -47,7 +45,7 @@ const OrderDetails = () => {
             <table className="w-full">
               <tbody>
                 {order.map((item, idx) => (
-                  <tr className="border-b border-b-gray-600">
+                  <tr className="border-b border-b-gray-600" key={idx}>
                     <td className="py-2 pl-4">
                       <div className="flex items-center">
                         <Image

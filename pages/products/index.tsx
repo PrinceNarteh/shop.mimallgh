@@ -1,27 +1,53 @@
-import { Card, Status } from "@/components";
+import { Card } from "@/components";
 import Pagination from "@/components/Pagination";
-import { axiosAuth } from "@/lib/axios";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { Product } from "@/types/product";
 import { capitalize } from "@/utils/utilities";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 
 interface IPage {
-  products: {
-    page: number;
-    perPage: number;
-    total: number;
-    totalPages: number;
-    data: Product[];
-  };
+  page: number;
+  perPage: number;
+  total: number;
+  totalPages: number;
+  data: Product[];
 }
 
-const ProductList = ({ products }: IPage) => {
-  const [state, setState] = useState(products);
-  console.log(state);
+const ProductList = () => {
+  const [state, setState] = useState<IPage>({
+    data: [],
+    page: 1,
+    perPage: 10,
+    total: 1,
+    totalPages: 1,
+  });
+  const axiosAuth = useAxiosAuth();
   const router = useRouter();
+  const { data: session } = useSession();
+  console.log(session);
+
+  const fetchData = async (page: number) => {
+    const res = await axiosAuth.get(
+      `/products?shopId=${session?.user?.id}&page=${page}`
+    );
+    setState(res.data);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axiosAuth.get(
+        `/products?shopId=${session?.user?.id}&page=1`
+      );
+      setState(res.data);
+    };
+    if (session?.user) {
+      fetchData();
+    }
+  }, [session]);
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
 
@@ -40,9 +66,7 @@ const ProductList = ({ products }: IPage) => {
         <table className="mt-5 w-full border-separate">
           <thead>
             <tr className="text-left text-xl">
-              <th className="w-14 pb-3 text-center">
-                <input type="checkbox" />
-              </th>
+              <th className="w-14 pb-3 text-center">NO.</th>
               <th className="px-2 pb-3">Product</th>
               <th className="w-40 px-2 pb-3 text-center">Category</th>
               <th className="w-40 px-2 pb-3 text-center">Stock</th>
@@ -51,7 +75,7 @@ const ProductList = ({ products }: IPage) => {
           </thead>
 
           <tbody className="border-separate border-spacing-10 space-y-20">
-            {products.data.map((product, idx) => (
+            {state.data.map((product, idx) => (
               <tr
                 className={`${
                   idx % 2 === 0 && "bg-gray-500 bg-opacity-20"
@@ -59,9 +83,7 @@ const ProductList = ({ products }: IPage) => {
                 key={idx}
                 onClick={() => handleClick(product.id)}
               >
-                <td className="py-7 text-center">
-                  <input type="checkbox" name="" id="" />
-                </td>
+                <td className="py-7 text-center">{state.page * (idx + 1)}</td>
                 <td className="px-2">
                   <div className="flex items-center gap-5">
                     <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden bg-teal-500">
@@ -92,20 +114,15 @@ const ProductList = ({ products }: IPage) => {
         </table>
       </Card>
       <div className="flex justify-center">
-        <Pagination />
+        <Pagination
+          page={state.page}
+          perPage={state.perPage}
+          totalPages={state.totalPages}
+          fetchData={fetchData}
+        />
       </div>
     </div>
   );
 };
-
-// This gets called on every request
-export async function getServerSideProps() {
-  // Fetch data from external API
-  const res = await axiosAuth.get("/products");
-  const products = await res.data;
-
-  // Pass data to the page via props
-  return { props: { products } };
-}
 
 export default ProductList;

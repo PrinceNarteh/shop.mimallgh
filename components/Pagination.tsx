@@ -1,6 +1,63 @@
+import { AxiosInstance } from "axios";
+import Link from "next/link";
 import React from "react";
 
-const Pagination = () => {
+interface IPagination {
+  page: number;
+  perPage: number;
+  totalPages: number;
+  fetchData: (page: number) => Promise<void>;
+}
+
+// const pager = ({
+//   totalPages,
+//   currentPage,
+//   axios,
+//   shopId,
+// }: {
+//   totalPages: number;
+//   currentPage: number;
+//   axios: AxiosInstance;
+//   shopId: string;
+// }) => {
+//   let pagination = [],
+//     i = 1;
+
+//   const handleClick = (page) => {};
+
+//   while (i <= totalPages) {
+//     if (
+//       i <= 3 || //the first three pages
+//       i >= totalPages - 2 || //the last three pages
+//       (i >= currentPage - 1 && i <= currentPage + 1)
+//     ) {
+//       //the currentPage, the page before and after
+//       pagination.push(
+//         // <Link href={`?page=${i}`} key={i}>
+//         <li>
+//           <Link
+//             href={`/products`}
+//             className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+//           >
+//             {i}
+//           </Link>
+//         </li>
+//         // </Link>
+//       );
+//       i++;
+//     } else {
+//       //any other page should be represented by ...
+//       pagination.push(<div>...</div>);
+//       //jump to the next page to be linked in the navigation
+//       i = i < currentPage ? currentPage - 1 : totalPages - 2;
+//     }
+//   }
+//   return pagination;
+// };
+
+const Pagination = (props: IPagination) => {
+  const { page, perPage, totalPages, fetchData } = props;
+
   return (
     <nav aria-label="" className="py-5">
       <ul className="inline-flex items-center -space-x-px">
@@ -22,47 +79,18 @@ const Pagination = () => {
             Prev
           </button>
         </li>
-        <li>
-          <a
-            href="#"
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            1
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            2
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            aria-current="page"
-            className="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-          >
-            3
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            4
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            5
-          </a>
-        </li>
+        {Array(totalPages)
+          .fill(null)
+          .map((_, idx) => (
+            <li key={idx}>
+              <button
+                onClick={() => fetchData(idx + 1)}
+                className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                {idx + 1}
+              </button>
+            </li>
+          ))}
         <li>
           <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
             Next

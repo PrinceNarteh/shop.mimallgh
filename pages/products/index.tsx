@@ -74,7 +74,7 @@ const ProductList = () => {
     if (status === "authenticated") {
       fetchData();
     }
-  }, [status]);
+  }, [status, axiosAuth, session]);
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
   console.log(state);

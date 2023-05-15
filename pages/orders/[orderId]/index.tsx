@@ -26,6 +26,8 @@ const OrderDetails = () => {
     }
   }, [status, axiosAuth, orderId]);
 
+  console.log(order);
+
   return (
     <div className="mx-auto max-w-7xl">
       <h3 className="my-5 text-3xl font-semibold">Order #80249</h3>

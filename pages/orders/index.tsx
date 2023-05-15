@@ -30,7 +30,7 @@ const Orders = () => {
     if (status === "authenticated") {
       fetchData();
     }
-  }, [status, axiosAuth, session]);
+  }, [status, axiosAuth, session]); 
 
   if (loading || !orders) return <Loader />;
 

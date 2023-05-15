@@ -37,6 +37,20 @@ const ProductList = () => {
     setState(res.data);
   };
 
+  const handlePrev = async (page: number) => {
+    const res = await axiosAuth.get(
+      `/products?shopId=${session?.user?.id}&page=${page - 1}&search=${search}`
+    );
+    setState(res.data);
+  };
+
+  const handleNext = async (page: number) => {
+    const res = await axiosAuth.get(
+      `/products?shopId=${session?.user?.id}&page=${page + 1}&search=${search}`
+    );
+    setState(res.data);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await axiosAuth.get(
@@ -100,7 +114,11 @@ const ProductList = () => {
                 key={idx}
                 onClick={() => handleClick(product.id)}
               >
-                <td className="py-7 text-center">{state.page * (idx + 1)}</td>
+                <td className="py-7 text-center">
+                  {state.page === 1
+                    ? state.page * (idx + 1)
+                    : state.page + (idx + 1).toString()}
+                </td>
                 <td className="px-2">
                   <div className="flex items-center gap-5">
                     <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden bg-teal-500">
@@ -136,6 +154,8 @@ const ProductList = () => {
           perPage={state.perPage}
           totalPages={state.totalPages}
           fetchData={fetchData}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
         />
       </div>
     </div>

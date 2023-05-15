@@ -32,7 +32,7 @@ const ProductList = () => {
 
   const fetchData = async (page: number) => {
     const res = await axiosAuth.get(
-      `/products?shopId=${session?.user?.id}&page=${page}`
+      `/products?shopId=${session?.user?.id}&page=${page}&search=${search}`
     );
     setState(res.data);
   };

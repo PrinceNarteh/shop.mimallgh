@@ -1,11 +1,13 @@
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { OrderItem } from "@/types/order";
 import calculatePrice from "@/utils/calculatePrice";
+import { intlFormat } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
+import { FaRegUser } from "react-icons/fa";
 
 const OrderDetails = () => {
   const [order, setOrder] = useState<OrderItem[]>([]);
@@ -27,12 +29,26 @@ const OrderDetails = () => {
   }, [status, axiosAuth, orderId]);
 
   console.log(order);
+  const date = intlFormat(
+    new Date(),
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    },
+    {
+      locale: "en-US",
+    }
+  );
 
   return (
     <div className="mx-auto max-w-7xl">
-      <h3 className="my-5 text-3xl font-semibold">Order #80249</h3>
+      <h3 className="my-5 text-3xl font-semibold">
+        Order #{order[0]?.order.orderId}
+      </h3>
       <div className="mb-5 flex items-center divide-x border-y border-y-gray-500 py-5">
-        <p className="px-5">January 15, 2023 at 12:30</p>
+        <p className="px-5">{date}</p>
         <p className="px-5">{order.length} Items</p>
         <p className="px-5">Total: ${calculatePrice(order)}</p>
         <p className="px-5">Paid</p>
@@ -52,12 +68,12 @@ const OrderDetails = () => {
                       <div className="flex items-center">
                         <Image
                           className="mr-5"
-                          src={""}
+                          src={item.product.images[0].secure_url}
                           width={40}
                           height={40}
                           alt="apple"
                         />
-                        <span>{item.productName}</span>
+                        <span>{item.product.title}</span>
                       </div>
                     </td>
                     <td className="w-24 text-center">{item.price}</td>
@@ -101,16 +117,23 @@ const OrderDetails = () => {
               <Link href="/">Edit</Link>
             </div>
             <div className="flex items-center">
-              <Image
-                src={""}
-                width={50}
-                height={50}
-                className="mr-3 rounded-full"
-                alt=""
-              />
+              <div className="mr-3">
+                {order[0]?.order.user.image !== null ? (
+                  <Image
+                    src={order[0]?.order.user.image.secure_url}
+                    width={50}
+                    height={50}
+                    className="mr-3 rounded-full"
+                    alt=""
+                  />
+                ) : (
+                  <FaRegUser className="text-3xl" />
+                )}
+              </div>
               <div>
                 <h3 className="text-xl font-bold">
-                  {/* {order[0].Order.user.firstName} */}
+                  {order[0]?.order.user.firstName}{" "}
+                  {order[0]?.order.user.lastName}
                 </h3>
                 <p>This is a first order</p>
               </div>
@@ -123,9 +146,10 @@ const OrderDetails = () => {
             </div>
             <div className="flex items-center">
               <address>
-                John Doe <br />
-                john.doe@email.com <br />
-                +233 (245) 123 4567
+                {order[0]?.order.user.firstName} {order[0]?.order.user.lastName}{" "}
+                <br />
+                {order[0]?.order.user.email} <br />
+                {order[0]?.order.user.phoneNumber}
               </address>
             </div>
           </div>

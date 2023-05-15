@@ -1,7 +1,3 @@
-import { AxiosInstance } from "axios";
-import Link from "next/link";
-import React from "react";
-
 interface IPagination {
   page: number;
   perPage: number;
@@ -66,7 +62,8 @@ const Pagination = (props: IPagination) => {
         <li>
           <button
             onClick={() => handlePrev(page)}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            disabled={page === 1}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
           >
             <svg
               aria-hidden="true"
@@ -99,7 +96,8 @@ const Pagination = (props: IPagination) => {
         <li>
           <button
             onClick={() => handleNext(page)}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            disabled={page === totalPages}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
           >
             Next
             <svg

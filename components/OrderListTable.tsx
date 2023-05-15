@@ -6,6 +6,8 @@ import React from "react";
 export const OrderListTable = ({ orders }: { orders: IOrder }) => {
   const router = useRouter();
 
+  console.log(orders);
+
   return (
     <div className="w-full">
       <div className="w-full pb-4 px-2">
@@ -33,7 +35,7 @@ export const OrderListTable = ({ orders }: { orders: IOrder }) => {
                     key={i}
                     onClick={() =>
                       router.push(
-                        `/orders/${order.orders[0].orderItems[0].order.id}`
+                        `/orders/${order.orders[i].orderItems[0].order.id}`
                       )
                     }
                     className="cursor-pointer rounded bg-light-gray"

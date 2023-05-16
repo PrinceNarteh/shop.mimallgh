@@ -1,4 +1,4 @@
-import { Card } from "@/components";
+import { Card, Loader } from "@/components";
 import Pagination from "@/components/Pagination";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { Product } from "@/types/product";
@@ -29,34 +29,43 @@ const ProductList = () => {
   const axiosAuth = useAxiosAuth();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async (page: number) => {
+    setIsLoading(true);
     const res = await axiosAuth.get(
       `/products?shopId=${session?.user?.id}&page=${page}&search=${search}`
     );
     setState(res.data);
+    setIsLoading(false);
   };
 
   const handlePrev = async (page: number) => {
+    setIsLoading(true);
     const res = await axiosAuth.get(
       `/products?shopId=${session?.user?.id}&page=${page - 1}&search=${search}`
     );
     setState(res.data);
+    setIsLoading(false);
   };
 
   const handleNext = async (page: number) => {
+    setIsLoading(true);
     const res = await axiosAuth.get(
       `/products?shopId=${session?.user?.id}&page=${page + 1}&search=${search}`
     );
     setState(res.data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const res = await axiosAuth.get(
         `/products?shopId=${session?.user?.id}&search=${search}&perPage=10`
       );
       setState(res.data);
+      setIsLoading(false);
     };
     if (search !== "") {
       fetchData();
@@ -65,11 +74,12 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const res = await axiosAuth.get(
         `/products?shopId=${session?.user?.id}&page=1`
       );
-      console.log(res);
       setState(res.data);
+      setIsLoading(false);
     };
     if (status === "authenticated") {
       fetchData();
@@ -77,7 +87,8 @@ const ProductList = () => {
   }, [status, axiosAuth, session]);
 
   const handleClick = (id: string) => router.push(`/products/${id}`);
-  console.log(state);
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className="mx-auto max-w-7xl">

@@ -3,7 +3,7 @@ import calculatePrice from "@/utils/calculatePrice";
 import { useRouter } from "next/router";
 import React from "react";
 
-export const OrderListTable = ({ orders }: { orders: IOrder }) => {
+export const OrderListTable = ({ orders }: { orders: IOrder | undefined }) => {
   const router = useRouter();
 
   console.log(orders);
@@ -38,7 +38,7 @@ export const OrderListTable = ({ orders }: { orders: IOrder }) => {
                         `/orders/${order.orders[i].orderItems[0].order.id}`
                       )
                     }
-                    className="cursor-pointer rounded bg-light-gray"
+                    className="cursor-pointer rounded bg-light-gray hover:scale-105 duration-300"
                   >
                     <td className="py-5 text-center ">{i + 1}</td>
                     <td className="py-5 text-center ">{item.orderId}</td>

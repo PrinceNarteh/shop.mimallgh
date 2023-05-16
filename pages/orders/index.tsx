@@ -30,9 +30,9 @@ const Orders = () => {
     if (status === "authenticated") {
       fetchData();
     }
-  }, [status, axiosAuth, session]); 
+  }, [status, axiosAuth, session]);
 
-  if (loading || !orders) return <Loader />;
+  if (loading) return <Loader />;
 
   return (
     <div className="w-11/12 mx-auto">

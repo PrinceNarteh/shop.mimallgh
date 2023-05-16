@@ -132,7 +132,7 @@ const ProductList = () => {
                 </td>
                 <td className="px-2">
                   <div className="flex items-center gap-5">
-                    <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden bg-teal-500">
+                    <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden">
                       <Image
                         src={product.images[0]?.secure_url}
                         style={{ objectFit: "cover" }}

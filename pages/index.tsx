@@ -10,7 +10,6 @@ import { IOrder } from "@/types/order";
 const Home = () => {
   const [orders, setOrders] = useState<IOrder>();
   const axiosAuth = useAxiosAuth();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { data: session, status } = useSession();
 

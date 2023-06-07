@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
 import { Card, Loader, OrderListTable } from "@/components";
-import { AiOutlineRise, AiOutlineFall } from "react-icons/ai";
-import { toast } from "react-hot-toast";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { IOrder } from "@/types/order";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { AiOutlineFall, AiOutlineRise } from "react-icons/ai";
 
 const Home = () => {
   const [orders, setOrders] = useState<IOrder>();

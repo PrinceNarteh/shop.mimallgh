@@ -57,8 +57,8 @@ export const createProductDto = z.object({
     .gte(0, "Price cannot be negative"),
   images: z.array(
     z.object({
-      public_id: z.string(),
-      secure_url: z.string(),
+      id: z.string(),
+      name: z.string(),
     })
   ),
 });

@@ -1,4 +1,3 @@
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import type { ChangeEvent } from "react";
@@ -11,10 +10,9 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { Product } from "@/types/product";
 import { categories } from "@/utils/menus";
 import { convertBase64, parseProductImageUrl } from "@/utils/utilities";
-import { deleteProductImage } from "../utils/deleteProductImage";
+import { omit } from "lodash";
 import { ICreateProduct } from "../utils/validations";
 import { Button, Card, InputField, Modal, SelectOption } from "./index";
-import { omit } from "lodash";
 
 const initialValues: ICreateProduct = {
   brand: "",
@@ -38,6 +36,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
     register,
     formState: { errors },
     setValue,
+    reset,
     getValues,
     handleSubmit,
   } = useForm<ICreateProduct>({
@@ -46,7 +45,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [publicId, setPublicId] = useState("");
+  const [imageId, setImageId] = useState("");
   const axiosAuth = useAxiosAuth();
 
   const selectedImages = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +84,8 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
     getImages();
   }, [images]);
 
-  const deleteImage = (public_id: string) => {
-    setPublicId(public_id);
+  const deleteImage = (name: string) => {
+    setImageId(name);
     setOpenDialog(true);
   };
 
@@ -95,13 +94,10 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
       const toastId = toast.loading("Loading...");
 
       try {
-        await deleteProductImage(publicId);
-
-        const newImages = getValues().images.filter(
-          (image) => image.id !== publicId
+        const res = await axiosAuth.delete(
+          `products/${product?.id}/image/${imageId}`
         );
-
-        setValue("images", newImages);
+        reset(res.data);
         toast.dismiss(toastId);
         toast.success("Image deleted successfully");
       } catch (error) {
@@ -131,6 +127,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
 
     try {
       if (productId) {
+        formData.append("images", JSON.stringify(data.images));
         images.forEach((image) => {
           formData.append("newImages", image);
         });
@@ -162,14 +159,11 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
         }
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.message);
     } finally {
       toast.dismiss(toastId);
     }
   };
-
-  console.log(product);
 
   return (
     <div className="mx-auto max-w-4xl pb-5">
@@ -268,13 +262,13 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
                       className="relative h-32 w-32 shrink-0 rounded-md bg-slate-500"
                     >
                       <AiOutlineCloseCircle
-                        onClick={() => deleteImage(image.name)}
-                        className="absolute -right-2 -top-2 z-0 cursor-pointer rounded-full bg-white text-2xl text-orange-500"
+                        onClick={() => deleteImage(image.id)}
+                        className="absolute -right-2 -top-2 z-10 cursor-pointer rounded-full bg-white text-2xl text-orange-500"
                       />
                       <div className="overflow-hidden">
                         <Image
                           src={parseProductImageUrl(image.name)}
-                          style={{ objectFit: "contain" }}
+                          style={{ objectFit: "cover" }}
                           alt=""
                           sizes="128px"
                           fill

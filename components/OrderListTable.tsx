@@ -6,8 +6,6 @@ import React from "react";
 export const OrderListTable = ({ orders }: { orders: IOrder | undefined }) => {
   const router = useRouter();
 
-  console.log(orders);
-
   return (
     <div className="w-full">
       <div className="w-full pb-4 px-2">

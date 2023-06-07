@@ -11,14 +11,12 @@ async function refreshToken(refreshToken: string) {
     }),
   });
   const data = await res.json();
-  console.log({ data });
 
   return data.accessToken;
 }
 
-export async function getOrders(url: string, method="GET") {
+export async function getOrders(url: string, method = "GET") {
   const session = await getServerSession(authOptions);
-  console.log("before: ", session?.user?.accessToken);
 
   let res = await fetch(BASE_URL + url, {
     method,

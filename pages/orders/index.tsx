@@ -19,7 +19,6 @@ const Orders = () => {
         const { data } = await axiosAuth.get(
           `orders/${session?.user?.id}/shop`
         );
-        console.log(data);
         setOrders(data);
       } catch (error: any) {
         toast.error("Error fetching data");

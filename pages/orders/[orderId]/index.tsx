@@ -28,7 +28,6 @@ const OrderDetails = () => {
     }
   }, [status, axiosAuth, orderId]);
 
-  console.log(order);
   const date = intlFormat(
     new Date(),
     {

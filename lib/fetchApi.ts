@@ -11,14 +11,12 @@ async function refreshToken(refreshToken: string) {
     }),
   });
   const data = await res.json();
-  console.log({ data });
 
   return data.accessToken;
 }
 
 export async function fetchApi(url: string) {
   const session = await getServerSession(authOptions);
-  console.log("before: ", session?.user?.accessToken);
 
   let res = await fetch(BASE_URL + url + `&shopId=${session?.user?.id}`, {
     method: "GET",
@@ -32,7 +30,6 @@ export async function fetchApi(url: string) {
       session.user.accessToken = await refreshToken(
         session?.user?.refreshToken ?? ""
       );
-    console.log("after: ", session?.user?.accessToken);
 
     res = await fetch(BASE_URL + url + `&shopId=${session?.user?.id}`, {
       method: "GET",

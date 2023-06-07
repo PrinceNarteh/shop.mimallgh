@@ -25,8 +25,7 @@ export type Product = {
   id: string;
   images: {
     id: string;
-    public_id: string;
-    secure_url: string;
+    name: string;
   }[];
   price: number;
   shop: { id: string; shopCode: string; name: string };

@@ -2,7 +2,7 @@ import { Card, Loader } from "@/components";
 import Pagination from "@/components/Pagination";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { Product } from "@/types/product";
-import { capitalize } from "@/utils/utilities";
+import { capitalize, parseProductImageUrl } from "@/utils/utilities";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -134,7 +134,7 @@ const ProductList = () => {
                   <div className="flex items-center gap-5">
                     <div className="relative flex-shrink-0 h-12 w-14 overflow-hidden">
                       <Image
-                        src={product.images[0]?.secure_url}
+                        src={parseProductImageUrl(product.images[0]?.name)}
                         style={{ objectFit: "cover" }}
                         alt={product.title}
                         sizes="48,56"

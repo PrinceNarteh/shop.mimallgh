@@ -19,7 +19,7 @@ export const convertBase64 = (file: File): Promise<string> => {
 };
 
 export const parseProductImageUrl = (imageName: string) => {
-  return `${process.env.NEXT_PUBLIC_BASE_URL}/product/image/${imageName}`;
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/products/image/${imageName}`;
 };
 
 export const parseShopImageUrl = (imageName: string) => {

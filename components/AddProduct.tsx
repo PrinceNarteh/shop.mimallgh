@@ -10,7 +10,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import { Product } from "@/types/product";
 import { categories } from "@/utils/menus";
-import { convertBase64 } from "@/utils/utilities";
+import { convertBase64, parseProductImageUrl } from "@/utils/utilities";
 import { deleteProductImage } from "../utils/deleteProductImage";
 import { ICreateProduct } from "../utils/validations";
 import { Button, Card, InputField, Modal, SelectOption } from "./index";
@@ -149,7 +149,11 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
         images.forEach((image) => {
           formData.append("images", image);
         });
-        const res = await axiosAuth.post("/products", formData);
+        const res = await axiosAuth.post("/products", formData, {
+          headers: {
+            "Content-Type": "multiple/form-data",
+          },
+        });
         if (res.status === 201) {
           toast.success("Product created successfully");
           push(`/products/${res.data.id}`);
@@ -158,13 +162,14 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
         }
       }
     } catch (error: any) {
+      console.log(error);
       toast.error(error.message);
     } finally {
       toast.dismiss(toastId);
     }
   };
 
-  console.log(errors);
+  console.log(product);
 
   return (
     <div className="mx-auto max-w-4xl pb-5">
@@ -268,7 +273,7 @@ export const AddProductForm = ({ product }: { product?: Product }) => {
                       />
                       <div className="overflow-hidden">
                         <Image
-                          src={image.name}
+                          src={parseProductImageUrl(image.name)}
                           style={{ objectFit: "contain" }}
                           alt=""
                           sizes="128px"

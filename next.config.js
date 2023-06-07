@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["placeimg.com", "res.cloudinary.com", "loremflickr.com"],
+    domains: ["api.mimallgh.com", "localhost"],
   },
   env: {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

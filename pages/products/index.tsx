@@ -70,7 +70,7 @@ const ProductList = () => {
     if (search !== "") {
       fetchData();
     }
-  }, [search]);
+  }, [search, axiosAuth, session?.user?.id]);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = "https://api.mimallgh.com";
 
 async function refreshToken(refreshToken: string) {
   const res = await fetch(BASE_URL + "/auth/refresh", {
